@@ -79,11 +79,11 @@ test_that("we test if the verbose parameter of baseline_correction() has correct
 })
 
 
-test_that("We test baseline_correction() with correct input", {
+test_that("We test baseline_correction() with correct input and check if the output is the right class", {
   expect_no_error(if(!inherits(baseline_correction(raman_spectra,max_iter=5,verbose=FALSE),"arPLSresult")){stop("Wrong output class")})
 })
 
-test_that("We test baseline_correction() with correct input", {
+test_that("We test baseline_correction() with correct input and check if the output baseline is as expected", {
   expect_no_error(if(sum(baseline_correction(wavenumbers+raman_spectra,verbose=FALSE)$baseline-wavenumbers)>=0.001)
     {stop("Algorithm doesn't seem to work as expected based on synthetic data")})
 })

@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: person("Corvin", "Idler", email = "corvin.idler@gmail.com",
   role = c("aut", "cre"))
 Description: implements the algorithm for smoothing of spectra from: Sung-June Baek, Aaron Park, Young-Jin Ahna and Jaebum Choo: "Baseline correction using asymmetrically reweighted penalized least squares smoothing", Analyst, 2015,140, 250-257 <https://pubs.rsc.org/en/content/articlelanding/2015/an/c4an01061b>
-License: CC-BY-SA-4.0
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
