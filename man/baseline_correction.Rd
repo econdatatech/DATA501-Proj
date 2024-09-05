@@ -9,7 +9,8 @@ baseline_correction(
   lambda = 1e+06,
   ratio = 1e-06,
   max_iter = 50,
-  verbose = FALSE
+  verbose = FALSE,
+  cpp = TRUE
 )
 }
 \arguments{

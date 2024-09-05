@@ -55,8 +55,8 @@ summary.arPLSresult<- function(x){
   }
 }
 
-library(Rcpp)
-library(RcppArmadillo)
+#library(Rcpp)
+#library(RcppArmadillo)
 Rcpp::cppFunction("arma::mat armaInv(const arma::mat & x) { return arma::inv(x); }", depends="RcppArmadillo")
 
 #' @title asymmetrically reweighted penalized least squares
@@ -98,7 +98,7 @@ Rcpp::cppFunction("arma::mat armaInv(const arma::mat & x) { return arma::inv(x);
 #' baseline <- baseline_correction(y)
 #' }
 #' @export baseline_correction
-baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE) {
+baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,cpp=TRUE) {
 # default values from page 253 of original publication
 
 #input validation
@@ -179,4 +179,3 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
 }
 
 
-#A2Data = read.table("C:/Users/corvini/OneDrive - SPC/Documents/baselineARPLss/data/Abelsonite.txt",header=FALSE,stringsAsFactors=FALSE)
