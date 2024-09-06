@@ -101,7 +101,6 @@ Rcpp::cppFunction("arma::mat armaInv(const arma::mat & x) { return arma::inv(x);
 baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,cpp=TRUE) {
 # default values from page 253 of original publication
 
-
 #input validation
   if (missing(y)) {
     stop("Missing input data. You need to provide an input vector for y")
@@ -186,4 +185,13 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
   return(arPLSresult)
 }
 
+#' Raw Raman spectrum for Abelsonite
+#' A data frame containing 3315 rows and 2 variables (wavenumber and measurement)
+#' @author Bob Downs \email{rdowns@u.arizona.edu}
+#' @references
+#' Lafuente B, Downs R T, Yang H, Stone N (2015) The power of databases: the RRUFF project.
+#' In: Highlights in Mineralogical Crystallography,
+#' T Armbruster and R M Danisi, eds. Berlin, Germany, W. De Gruyter, pp 1-30
+#' @source \url{https://rruff.info/repository/sample_child_record_raman_full/by_minerals/Abelsonite__R070007__Broad_Scan__532__0__unoriented__Raman_Data_RAW__13756.txt}
+"Abelsonite"
 
