@@ -12,7 +12,7 @@
 #' @param last_ratio The last value of the ratio stopping criterium before stopping.
 #' @export
 new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_iter=50,
-                            baseline=numeric(),last_iter=int(),last_ratio=double()) {
+                            baseline=numeric(),last_iter=integer(),last_ratio=double()) {
   object<-list(rawinput=rawinput, lambda=lambda,ratio=ratio,max_iter=max_iter,baseline=baseline,
             last_iter=last_iter,last_ratio=last_ratio)
   attr(object,"class") <- "arPLSresult"
@@ -29,7 +29,7 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
 #' @export
 plot.arPLSresult<- function(x){
   plot(x$rawinput,main="arPLS baseline estimation",ylab="Measurements")
-  lines(x$baseline,col='red')
+  graphics::lines(x$baseline,col='red')
 
 }
 
@@ -101,6 +101,7 @@ Rcpp::cppFunction("arma::mat armaInv(const arma::mat & x) { return arma::inv(x);
 baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,cpp=TRUE) {
 # default values from page 253 of original publication
 
+
 #input validation
   if (missing(y)) {
     stop("Missing input data. You need to provide an input vector for y")
@@ -136,6 +137,11 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     stop("The parameter 'verbose' must be a single boolean value. TRUE or FALSE are the only valid inputs.")
   }
 
+  #get ready with plotting setup
+  op <- graphics::par(no.readonly = TRUE)
+  on.exit(par(op), add = TRUE)
+  graphics::par(mfrow = c(2, 1))
+
   n <- length(y)
   D <- diff(diag(n), differences = 2)
   H<-lambda*(t(D) %*% D)
@@ -147,8 +153,8 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     arPLSresult$last_iter<-i
 
     W <- diag(as.numeric(w))
-    z <- solve(W + H) %*% (W %*% y)
-    #z <- armaInv(W + H) %*% (W %*% y)
+    #z <- solve(W + H) %*% (W %*% y)
+    z <- armaInv(W + H) %*% (W %*% y)
     arPLSresult$baseline<-z
     d=y-z
     dneg=d[d<0]
@@ -167,8 +173,10 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     arPLSresult$last_ratio<-norm(wold-w, type = "2")/ norm(wold, type = "2")
     if(verbose){
       print(paste("Weight vector change ratio: ",arPLSresult$last_ratio))
-      plot(y)
-      lines(z,col='red')
+      # store original settings and then divide frame in 2X1 grid
+      plot(y,main=paste("Itreation: ",i))
+      graphics::lines(z,col='red')
+      plot(w,main="Weights")
     }
     if (arPLSresult$last_ratio < ratio){
       return(arPLSresult)

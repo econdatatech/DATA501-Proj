@@ -10,7 +10,7 @@ new_arPLSresult(
   ratio = 1e-06,
   max_iter = 50,
   baseline = numeric(),
-  last_iter = int(),
+  last_iter = integer(),
   last_ratio = double()
 )
 }
