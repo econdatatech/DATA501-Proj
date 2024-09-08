@@ -13,7 +13,7 @@ rcpparma_innerproduct <- function(x) {
     .Call(`_baselineARPLss_rcpparma_innerproduct`, x)
 }
 
-rcpparma_bothproducts <- function(x) {
-    .Call(`_baselineARPLss_rcpparma_bothproducts`, x)
+armaInv <- function(x) {
+    .Call(`_baselineARPLss_armaInv`, x)
 }
 

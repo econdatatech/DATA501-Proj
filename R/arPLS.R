@@ -55,10 +55,6 @@ summary.arPLSresult<- function(x){
   }
 }
 
-#library(Rcpp)
-#library(RcppArmadillo)
-Rcpp::cppFunction("arma::mat armaInv(const arma::mat & x) { return arma::inv(x); }", depends="RcppArmadillo")
-
 #' @title asymmetrically reweighted penalized least squares
 #'
 #' @author Corvin Idler
@@ -138,7 +134,7 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
 
   #get ready with plotting setup
   op <- graphics::par(no.readonly = TRUE)
-  on.exit(par(op), add = TRUE)
+  on.exit(graphics::par(op), add = TRUE)
   graphics::par(mfrow = c(2, 1))
 
   n <- length(y)
@@ -166,7 +162,7 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
       break;}
 
     m=mean(dneg)
-    s=sd(dneg)
+    s=stats::sd(dneg)
     w <- 1/(1+exp(2*(d-(-m+2*s))/s))
 
     arPLSresult$last_ratio<-norm(wold-w, type = "2")/ norm(wold, type = "2")
