@@ -1,7 +1,7 @@
 #' Constructor for arPLSresult object
 #'
 #' @description
-#' This is an constructor for the S3 object arPLSresult
+#' This is an constructor for the S3 object arPLSresult.
 #'
 #' @param rawinput The original spectrum fed into the algorithm.
 #' @param lambda The lambda parameter fed into the algorithm.
@@ -22,35 +22,36 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
 #' Take an object of class arPLSresult and plot some results
 #'
 #' @description
-#' This is an S3 generic. To plot an input spectrum and an estimated
-#' baseline spectrum
+#' This is an S3 generic. To plot an input spectrum and an estimated baseline spectrum.
 #'
 #' @param x A result object of class arPLSresult (mainly a list).
+#' @param ... placeholder for arbitrary additional parameters (to stay in line with other generic plot functions)
 #' @export
-plot.arPLSresult<- function(x){
+  plot.arPLSresult<- function(x,...){
   plot(x$rawinput,main="arPLS baseline estimation",ylab="Measurements")
   graphics::lines(x$baseline,col='red')
-
 }
 
 #' Take an object of class arPLSresult and summarize (print) some facts about it
 #'
 #' @description
-#' This is an S3 generic. To summarize (print) some facts about
-#' the arPLS baseline estimation that led to it
+#' This is an S3 generic.
+#' To summarize (print) some facts about the arPLS baseline estimation that led to it.
 #'
-#' @param x A result object of class arPLSresult (mainly a list).
+#'
+#' @param object A result object of class arPLSresult (mainly a list).
+#' @param ... placeholder for arbitrary additional parameters (to stay in line with other generic summary functions)
 #' @export
-summary.arPLSresult<- function(x){
-  print(paste("The lambda parmeter value used was: ",x$lambda))
-  print(paste("The ratio parameter value used was: ",x$ratio))
-  print(paste("The max_iter parameter value used was: ",x$max_iter))
-  print(paste("The alogrithm stopped after the following number or iterations: ",x$last_iter))
-  print(paste("The last weight ratio value was: ",x$last_ratio))
-  if(x$last_iter==x$max_iter){
+summary.arPLSresult<- function(object, ...){
+  print(paste("The lambda parmeter value used was: ",object$lambda))
+  print(paste("The ratio parameter value used was: ",object$ratio))
+  print(paste("The max_iter parameter value used was: ",object$max_iter))
+  print(paste("The alogrithm stopped after the following number or iterations: ",object$last_iter))
+  print(paste("The last weight ratio value was: ",object$last_ratio))
+  if(object$last_iter==object$max_iter){
     print("It appears that the algorithm stopped because the maximum number of iterations was reached")
   }
-  if(x$last_ratio<x$ratio){
+  if(object$last_ratio<object$ratio){
     print("It appears that the algorithm stopped because the change in weights per iteration fell below the ratio threshold")
   }
 }
@@ -59,8 +60,7 @@ summary.arPLSresult<- function(x){
 #'
 #' @author Corvin Idler
 #' @description
-#' Baseline correction using asymmetrically reweighted penalized least
-#' squares smoothing (Baek et al. 2015).
+#' Baseline correction using asymmetrically reweighted penalized least squares smoothing (Baek et al. 2015).
 #'
 #' @details
 #' The algorithm iteratively estimates a spectral baseline curve by updating a
@@ -78,6 +78,7 @@ summary.arPLSresult<- function(x){
 #' @param ratio Stopping criterion based on changes in weight vector per iteration (default: 1e-6).
 #' @param max_iter Maximum number of iterations as fall back criterion if no conversion happens (default: 50).
 #' @param verbose Boolean to print intermediary outputs (default: FALSE).
+#' @param cpp Boolean to change between Armadillo CPP armaInv and native solver function  (default: TRUE).
 #' @return object of class arPLSresult:
 #' \itemize{
 #'   \item \code{rawinput}: The original spectrum fed into the algorithm.
@@ -149,7 +150,10 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
 
     W <- diag(as.numeric(w))
     #z <- solve(W + H) %*% (W %*% y)
-    z <- armaInv(W + H) %*% (W %*% y)
+    #z<-limSolve::Solve.banded(W + H) %*% (W %*% y)
+    z <- limSolve::Solve.banded(W+H,2,2,W %*%y)
+
+    #z <- rcpparma_armaInv(W + H) %*% (W %*% y)
     arPLSresult$baseline<-z
     d=y-z
     dneg=d[d<0]

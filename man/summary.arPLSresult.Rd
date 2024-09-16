@@ -4,12 +4,14 @@
 \alias{summary.arPLSresult}
 \title{Take an object of class arPLSresult and summarize (print) some facts about it}
 \usage{
-\method{summary}{arPLSresult}(x)
+\method{summary}{arPLSresult}(object, ...)
 }
 \arguments{
-\item{x}{A result object of class arPLSresult (mainly a list).}
+\item{object}{A result object of class arPLSresult (mainly a list).}
+
+\item{...}{placeholder for arbitrary additional parameters (to stay in line with other generic summary functions)}
 }
 \description{
-This is an S3 generic. To summarize (print) some facts about
-the arPLS baseline estimation that led to it
+This is an S3 generic.
+To summarize (print) some facts about the arPLS baseline estimation that led to it.
 }

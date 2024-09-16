@@ -2,7 +2,6 @@
 \alias{rcpparma_hello_world}
 \alias{rcpparma_innerproduct}
 \alias{rcpparma_outerproduct}
-\alias{rcpparma_bothproducts}
 \title{Set of functions in example RcppArmadillo package}
 \description{
   These four functions are created when
@@ -13,7 +12,6 @@
 rcpparma_hello_world()
 rcpparma_outerproduct(x)
 rcpparma_innerproduct(x)
-rcpparma_bothproducts(x)
 }
 \arguments{
   \item{x}{a numeric vector}
@@ -28,9 +26,6 @@ rcpparma_bothproducts(x)
   \code{rcpparma_innerproduct()} returns a double computer as the inner
   (vector) product of \code{x}.
 
-  \code{rcpparma_bothproducts()} returns a list with both the outer and
-  inner products.
-  
 }
 \details{
   These are example functions which should be largely

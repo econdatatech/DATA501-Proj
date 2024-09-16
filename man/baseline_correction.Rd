@@ -23,6 +23,8 @@ baseline_correction(
 \item{max_iter}{Maximum number of iterations as fall back criterion if no conversion happens (default: 50).}
 
 \item{verbose}{Boolean to print intermediary outputs (default: FALSE).}
+
+\item{cpp}{Boolean to change between Armadillo CPP armaInv and native solver function  (default: TRUE).}
 }
 \value{
 object of class arPLSresult:
@@ -37,8 +39,7 @@ object of class arPLSresult:
 }
 }
 \description{
-Baseline correction using asymmetrically reweighted penalized least
-squares smoothing (Baek et al. 2015).
+Baseline correction using asymmetrically reweighted penalized least squares smoothing (Baek et al. 2015).
 }
 \details{
 The algorithm iteratively estimates a spectral baseline curve by updating a

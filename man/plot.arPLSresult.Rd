@@ -4,12 +4,13 @@
 \alias{plot.arPLSresult}
 \title{Take an object of class arPLSresult and plot some results}
 \usage{
-\method{plot}{arPLSresult}(x)
+\method{plot}{arPLSresult}(x, ...)
 }
 \arguments{
 \item{x}{A result object of class arPLSresult (mainly a list).}
+
+\item{...}{placeholder for arbitrary additional parameters (to stay in line with other generic plot functions)}
 }
 \description{
-This is an S3 generic. To plot an input spectrum and an estimated
-baseline spectrum
+This is an S3 generic. To plot an input spectrum and an estimated baseline spectrum.
 }

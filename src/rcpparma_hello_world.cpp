@@ -40,7 +40,11 @@ double rcpparma_innerproduct(const arma::colvec & x) {
     return v;
 }
 
-// Making the matrix inversion function from the Armadillo package avai
-
+// Making the matrix inversion function from the Armadillo package available
+//' Title Armadillo package matrix inversion function
+//' Description Takes a matrix and inverts it.
+//' @param x matrix to be inverted
+//' @return Inverted matrix
+//' @export
 // [[Rcpp::export]]
-arma::mat armaInv(const arma::mat & x) { return arma::inv(x); }
+arma::mat rcpparma_armaInv(const arma::mat & x) { return arma::inv(x); }

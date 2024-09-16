@@ -13,7 +13,12 @@ rcpparma_innerproduct <- function(x) {
     .Call(`_baselineARPLss_rcpparma_innerproduct`, x)
 }
 
-armaInv <- function(x) {
-    .Call(`_baselineARPLss_armaInv`, x)
+#' Title Armadillo package matrix inversion function
+#' Description Takes a matrix and inverts it.
+#' @param x matrix to be inverted
+#' @return Inverted matrix
+#' @export
+rcpparma_armaInv <- function(x) {
+    .Call(`_baselineARPLss_rcpparma_armaInv`, x)
 }
 

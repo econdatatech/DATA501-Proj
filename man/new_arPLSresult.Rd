@@ -30,5 +30,5 @@ new_arPLSresult(
 \item{last_ratio}{The last value of the ratio stopping criterium before stopping.}
 }
 \description{
-This is an constructor for the S3 object arPLSresult
+This is an constructor for the S3 object arPLSresult.
 }
