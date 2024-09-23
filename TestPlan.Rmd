@@ -1,6 +1,6 @@
 ---
 title: "Testing Plan for baselineARPLss package (DATA501)"
-output: rmarkdown::html_document
+output: rmarkdown::pdf_document
 ---
 https://posit.cloud/content/8810333
 
@@ -11,7 +11,7 @@ remotes::install_github("econdatatech/baselineARPLss")
 library(baselineARPLss)
 data("Abelsonite")
 
-
+res<-baseline_estimation(Abelsonite$measurement)
 
 
 1. Package Structure and Functionality
