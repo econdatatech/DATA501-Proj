@@ -16,7 +16,8 @@ devtools::install_github("econdatatech/baselineARPLss")
 A Vignette is available from here: https://github.com/econdatatech/baselineARPLss/blob/main/vignettes/arPLS-vignette.pdf
 
 A Testplan from here:
-https://github.com/econdatatech/baselineARPLss/blob/main/TestPlan.pdf
+https://github.com/econdatatech/baselineARPLss/blob/main/tests/TestPlan.pdf
+
 
 [Baek et al., 2015]: Baek, S.-J., Park, A., Ahn, Y.-J., and Choo, J. (2015). Baseline correction
 using asymmetrically reweighted penalized least squares smoothing. Analyst, 140:250–257.
