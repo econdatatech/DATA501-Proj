@@ -53,6 +53,7 @@ result<-baseline_estimation(Abelsonite$measurement)
 #due to default values that is the equivalent for the following function call
 #result <- function(Abelsonite$measurement, lambda = 1e6, 
 #ratio = 1e-6, max_iter = 50,verbose=FALSE, algo="banded")
+result
 ```
 
 The package will use an S3 object of the class arPLSresult to store the results of the baseline estimation. The data structure behind this object is a named list with input data, result and parameter values.  
@@ -67,7 +68,7 @@ The rational is that similarly to the result object of a lm-regression is would 
     \item last weight vector ration at the time when the algorithm stopped
 \end{itemize}
 The last two pieces of information allow to determine if the algorithm stopped because it converged or because it ran out of iteration.
-Given that the result is a custom data structure there is a summarize and plot function for this class. The custom plot function will plot the original raw spectrum with the estimated baseline overlaid. The usage is shown below.
+Given that the result is a custom data structure there is a summarize and plot function for this class included in the package. The custom plot function will plot the original raw spectrum with the estimated baseline overlaid. The usage is shown below.
 ```{r}
 plot(result)
 ```
