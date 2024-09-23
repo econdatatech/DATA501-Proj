@@ -60,7 +60,7 @@ summary.arPLSresult<- function(object, ...){
 #'
 #' @author Corvin Idler
 #' @description
-#' Baseline correction using asymmetrically reweighted penalized least squares smoothing (Baek et al. 2015).
+#' Baseline estimation using asymmetrically reweighted penalized least squares smoothing (Baek et al. 2015).
 #'
 #' @details
 #' The algorithm iteratively estimates a spectral baseline curve by updating a
@@ -92,10 +92,10 @@ summary.arPLSresult<- function(object, ...){
 #'
 #' @examples{
 #' y <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-#' baseline <- baseline_correction(y)
+#' baseline <- baseline_estimation(y)
 #' }
-#' @export baseline_correction
-baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,cpp=TRUE) {
+#' @export baseline_estimation
+baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,cpp=TRUE) {
 # default values from page 253 of original publication
 
 #input validation
@@ -149,11 +149,21 @@ baseline_correction <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     arPLSresult$last_iter<-i
 
     W <- diag(as.numeric(w))
-    #z <- solve(W + H) %*% (W %*% y)
-    #z<-limSolve::Solve.banded(W + H) %*% (W %*% y)
-    z <- limSolve::Solve.banded(W+H,2,2,W %*%y)
 
-    #z <- rcpparma_armaInv(W + H) %*% (W %*% y)
+    if(is.null(cpp)){
+        if(verbose){print("using native solve")}
+        z <- solve(W + H) %*% (W %*% y)
+    }
+    else{
+      if(cpp){
+        if(verbose){print("using rcpparma_armaInv")}
+        z <- rcpparma_armaInv(W + H) %*% (W %*% y)
+      }
+      else {
+        if(verbose){print("using solve.banded")}
+        z <- limSolve::Solve.banded(W+H,2,2,W %*%y)
+      }
+    }
     arPLSresult$baseline<-z
     d=y-z
     dneg=d[d<0]
