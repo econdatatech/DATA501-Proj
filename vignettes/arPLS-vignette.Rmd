@@ -51,7 +51,7 @@ With such input data at hand one of the most basic calls of the baseline_estimat
 ```{r}
 result<-baseline_estimation(Abelsonite$measurement)
 #due to default values that is the equivalent for the following function call
-#result <- function(Abelsonite$measurement, lambda = 1e6, 
+#result <- -baseline_estimation(Abelsonite$measurement, lambda = 1e6, 
 #ratio = 1e-6, max_iter = 50,verbose=FALSE, algo="banded")
 ```
 

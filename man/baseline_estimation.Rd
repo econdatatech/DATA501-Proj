@@ -10,7 +10,7 @@ baseline_estimation(
   ratio = 1e-06,
   max_iter = 50,
   verbose = FALSE,
-  cpp = TRUE
+  algo = "banded"
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ baseline_estimation(
 
 \item{verbose}{Boolean to print intermediary outputs (default: FALSE).}
 
-\item{cpp}{Boolean to change between Armadillo CPP armaInv and native solver function  (default: TRUE).}
+\item{algo}{String to choose solver between Armadillo CPP armaInv ("cpp") and native solver function "native" and limSolve::Solve.banded solver ("banded") (default: "banded").}
 }
 \value{
 object of class arPLSresult:
