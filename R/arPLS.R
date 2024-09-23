@@ -78,7 +78,7 @@ summary.arPLSresult<- function(object, ...){
 #' @param ratio Stopping criterion based on changes in weight vector per iteration (default: 1e-6).
 #' @param max_iter Maximum number of iterations as fall back criterion if no conversion happens (default: 50).
 #' @param verbose Boolean to print intermediary outputs (default: FALSE).
-#' @param cpp Boolean to change between Armadillo CPP armaInv and native solver function  (default: TRUE).
+#' @param algo String to choose solver between Armadillo CPP armaInv ("cpp") and native solver function "native" and limSolve::Solve.banded solver ("banded") (default: "banded").
 #' @return object of class arPLSresult:
 #' \itemize{
 #'   \item \code{rawinput}: The original spectrum fed into the algorithm.
@@ -95,7 +95,7 @@ summary.arPLSresult<- function(object, ...){
 #' baseline <- baseline_estimation(y)
 #' }
 #' @export baseline_estimation
-baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,cpp=TRUE) {
+baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,algo="banded") {
 # default values from page 253 of original publication
 
 #input validation
@@ -132,6 +132,9 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
   if (!is.logical(verbose) || length(verbose) != 1  ) {
     stop("The parameter 'verbose' must be a single boolean value. TRUE or FALSE are the only valid inputs.")
   }
+  if (!(algo %in% c("cpp", "native", "banded"))){
+    stop("The parameter 'algo' must have one of the following values: cpp, native or banded")
+  }
 
   #get ready with plotting setup
   op <- graphics::par(no.readonly = TRUE)
@@ -150,12 +153,12 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
 
     W <- diag(as.numeric(w))
 
-    if(is.null(cpp)){
+    if(algo=="native"){
         if(verbose){print("using native solve")}
         z <- solve(W + H) %*% (W %*% y)
     }
     else{
-      if(cpp){
+      if(algo=="cpp"){
         if(verbose){print("using rcpparma_armaInv")}
         z <- rcpparma_armaInv(W + H) %*% (W %*% y)
       }
