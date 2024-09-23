@@ -62,19 +62,38 @@ Report your findings.
 ## Input validation
 The baseline_estimation function has a lot of parameters. Most (apart from the input data in form of the raw spectrum) have default parameters.
 ```{r eval=FALSE}
-baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,algo="banded") {
+baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter =50,verbose=FALSE,algo="banded")
+```
 
+* y:	Numeric vector representing the spectrum.
+* lambda:	Smoothing parameter. flaoting point number
+* ratio:	Stopping criterion based on changes in weight vector per iteration. floating point number
+* max_iter:	Maximum number of iterations. Integer number
+* verbose: Boolean to print intermediary outputs
+* algo: String to choose solver between Armadillo CPP armaInv ("cpp") and native solver function "native" and limSolve::Solve.banded solver ("banded") 
 
-3. Input Validation
-Objective: Confirm that functions handle different types of input data appropriately.
-Tests:
-Test handling of valid inputs such as numeric vectors representing Raman spectra.
-Provide invalid inputs (e.g., missing values, non-numeric data, inappropriate dimensions) and check for informative error messages.
-Test behavior with edge cases like empty spectra or spectra with only a few data points.
-4. Performance and Efficiency
-Objective: Ensure the package performs efficiently for large datasets.
-Tests:
-Time the execution of baseline estimation for both small and large datasets.
-Test memory usage and confirm the package does not excessively increase memory consumption for large Raman spectra.
-Evaluate multi-threading or parallel processing capabilities if implemented.
+Try different values than the default value for each parameter and report your findings. 
+Furthermore try to feed the parameters with wrong data types and report your findings.
+
+## Performance testing
+Run the performance test below involving different solver algorithms.
+Report back the values for nativesolve, cppsolve and bandedsolve.
+CAVE: This will take quite a long time!
+```{r eval=FALSE}
+start_time <- Sys.time()
+rn<-baseline_estimation(Abelsonite$measurement,algo="native")
+end_time<- Sys.time()
+nativesolve<-(end_time - start_time)
+nativesolve
+start_time <- Sys.time()
+rc<-baseline_estimation(Abelsonite$measurement,algo="cpp")
+end_time<- Sys.time()
+cppsolve<-(end_time - start_time)
+cppsolve
+start_time <- Sys.time()
+rb<-baseline_estimation(Abelsonite$measurement,algo="banded")
+end_time<- Sys.time()
+bandedsolve<-(end_time - start_time)
+bandedsolve
+```
 
