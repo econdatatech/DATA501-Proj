@@ -7,6 +7,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+# Preliminaries for OSX users
+To use this package you have to have a FORTRAN compiler installed.
+Please see https://cran.r-project.org/bin/macosx/tools/ and https://mac.r-project.org/tools/ for more details. 
+
+
 # Introduction
 In the domain of (Raman) Spectroscopy it is a common problem and nuisance that the measured signal is a combination of "chemical information", a (background) baseline and random noise (@Zhang2010). The so called baseline signal appears in the measurement as a smooth curve over the measured spectrum and it is important to estimate it and correct for it to allow e.g. for the correct integration of the part of the measured signal that truly belongs to chemical characteristics of the sample of interest.
 

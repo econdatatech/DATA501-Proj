@@ -3,8 +3,7 @@
 \docType{data}
 \name{Abelsonite}
 \alias{Abelsonite}
-\title{Raw Raman spectrum for Abelsonite
-A data frame containing 3315 rows and 2 variables (wavenumber and measurement)}
+\title{Raw Raman spectrum for Abelsonite}
 \format{
 An object of class \code{data.frame} with 3315 rows and 2 columns.
 }
@@ -15,7 +14,6 @@ An object of class \code{data.frame} with 3315 rows and 2 columns.
 Abelsonite
 }
 \description{
-Raw Raman spectrum for Abelsonite
 A data frame containing 3315 rows and 2 variables (wavenumber and measurement)
 }
 \references{

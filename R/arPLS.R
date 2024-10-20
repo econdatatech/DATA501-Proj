@@ -1,4 +1,4 @@
-#' Constructor for arPLSresult object
+#' @title Constructor for arPLSresult object
 #'
 #' @description
 #' This is an constructor for the S3 object arPLSresult.
@@ -10,7 +10,6 @@
 #' @param baseline The fitted spectral baseline.
 #' @param last_iter The number of iterations the algorithm did before stopping.
 #' @param last_ratio The last value of the ratio stopping criterium before stopping.
-#' @export
 new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_iter=50,
                             baseline=numeric(),last_iter=integer(),last_ratio=double()) {
   object<-list(rawinput=rawinput, lambda=lambda,ratio=ratio,max_iter=max_iter,baseline=baseline,
@@ -19,20 +18,19 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
   object
 }
 
-#' Take an object of class arPLSresult and plot some results
+#' @title Take an object of class arPLSresult and plot some results
 #'
 #' @description
 #' This is an S3 generic. To plot an input spectrum and an estimated baseline spectrum.
 #'
 #' @param x A result object of class arPLSresult (mainly a list).
 #' @param ... placeholder for arbitrary additional parameters (to stay in line with other generic plot functions)
-#' @export
   plot.arPLSresult<- function(x,...){
   plot(x$rawinput,main="arPLS baseline estimation",ylab="Measurements")
   graphics::lines(x$baseline,col='red')
 }
 
-#' Take an object of class arPLSresult and summarize (print) some facts about it
+#' @title Take an object of class arPLSresult and summarize (print) some facts about it
 #'
 #' @description
 #' This is an S3 generic.
@@ -91,8 +89,8 @@ summary.arPLSresult<- function(object, ...){
 #' }
 #'
 #' @examples{
-#' y <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-#' baseline <- baseline_estimation(y)
+#' data("Abelsonite")
+#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
 #' }
 #' @export baseline_estimation
 baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,algo="banded") {
@@ -136,10 +134,12 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     stop("The parameter 'algo' must have one of the following values: cpp, native or banded")
   }
 
+  if(verbose){
   #get ready with plotting setup
   op <- graphics::par(no.readonly = TRUE)
   on.exit(graphics::par(op), add = TRUE)
   graphics::par(mfrow = c(2, 1))
+  }
 
   n <- length(y)
   D <- diff(diag(n), differences = 2)
@@ -198,9 +198,10 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
   return(arPLSresult)
 }
 
-#' Raw Raman spectrum for Abelsonite
-#' A data frame containing 3315 rows and 2 variables (wavenumber and measurement)
+#' @title Raw Raman spectrum for Abelsonite
+#' @description A data frame containing 3315 rows and 2 variables (wavenumber and measurement)
 #' @author Bob Downs \email{rdowns@u.arizona.edu}
+#' @examples{data("Abelsonite")}
 #' @references
 #' Lafuente B, Downs R T, Yang H, Stone N (2015) The power of databases: the RRUFF project.
 #' In: Highlights in Mineralogical Crystallography,

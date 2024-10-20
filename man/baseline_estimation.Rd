@@ -49,8 +49,8 @@ each other
 }
 \examples{
 {
-y <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-baseline <- baseline_estimation(y)
+data("Abelsonite")
+baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
 }
 }
 \references{
