@@ -27,7 +27,7 @@ data("Abelsonite")
 res<-baseline_estimation(Abelsonite$measurement)
 ```
 
-### Result plot
+### expected output: Result plot
 Issue the below command and compare the result with the picture below.
 ```{r}
 plot(res)
@@ -38,6 +38,17 @@ Issue the below command and compare the result with the output below.
 summary(res)
 ```
 
+## Expected output with synthetic data
+Execute the following test (with the expected result of FALSE)
+```{r}
+#Generate testdata
+wavenumbers <- seq(0, 1000, length.out = 1000)
+raman_spectra <- 100*exp(-((wavenumbers-300)/15)^2) + 200*exp(-((wavenumbers-750)/30)^2) #+ 100*exp(-((wavenumbers-800)/15)^2)
+
+sum(baseline_estimation(wavenumbers+raman_spectra,verbose=FALSE)$baseline-wavenumbers)>=0.001
+```
+
+## Misc
 Try to obtain the help page for the baseline_estimation function.
 ```{r}
 ?baseline_estimation
@@ -74,6 +85,53 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter =50,verb
 
 Try different values than the default value for each parameter and report your findings. 
 Furthermore try to feed the parameters with wrong data types and report your findings.
+Here are some example tests to perform:
+Wrong input type for the spectrum
+```{r, error=TRUE}
+baseline_estimation(y = "This is a sting")
+```
+
+Missing input for the spectrum
+```{r, error=TRUE}
+baseline_estimation(lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE)
+```
+
+Presence of NAs in the spectrum
+```{r, error=TRUE}
+baseline_estimation(c(1,2,3,4,NA))
+```
+
+Presence of Infs in the spectrum
+```{r, error=TRUE}
+baseline_estimation(c(1,2,3,4,Inf))
+```
+
+Spectrum has less than 3 values
+```{r, error=TRUE}
+baseline_estimation(c(1,2))
+```
+
+Spectrum has negative values
+```{r, error=TRUE}
+baseline_estimation(c(-1,2,0))
+```
+
+Lambda has wrong format and negative values
+```{r, error=TRUE}
+baseline_estimation(c(1,2,0),lambda=c(-1,2))
+```
+
+Ratio parameter has wrong format and negative values
+```{r, error=TRUE}
+baseline_estimation(c(1,2,0),ratio=c(-1,2))
+```
+
+Max_iter parameter has wrong format and negative values
+```{r, error=TRUE}
+baseline_estimation(c(1,2,0),max_iter=c(-1,2))
+```
+
+Feel free to come up with your own input data "violation" tests.
 
 ## Performance testing
 Run the performance test below involving different solver algorithms.
