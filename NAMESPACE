@@ -1,6 +1,5 @@
 useDynLib(baselineARPLss, .registration=TRUE)
-importFrom(Rcpp, evalCpp)
-exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, sourceCpp)
 S3method(plot,arPLSresult)
 S3method(summary,arPLSresult)
 export(baseline_estimation)

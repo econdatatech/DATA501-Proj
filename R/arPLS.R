@@ -10,6 +10,7 @@
 #' @param baseline The fitted spectral baseline.
 #' @param last_iter The number of iterations the algorithm did before stopping.
 #' @param last_ratio The last value of the ratio stopping criterium before stopping.
+#' @noRd
 new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_iter=50,
                             baseline=numeric(),last_iter=integer(),last_ratio=double()) {
   object<-list(rawinput=rawinput, lambda=lambda,ratio=ratio,max_iter=max_iter,baseline=baseline,
@@ -53,6 +54,7 @@ summary.arPLSresult<- function(object, ...){
     print("It appears that the algorithm stopped because the change in weights per iteration fell below the ratio threshold")
   }
 }
+
 
 #' @title asymmetrically reweighted penalized least squares
 #'
@@ -134,12 +136,10 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     stop("The parameter 'algo' must have one of the following values: cpp, native or banded")
   }
 
-  if(verbose){
   #get ready with plotting setup
   op <- graphics::par(no.readonly = TRUE)
   on.exit(graphics::par(op), add = TRUE)
   graphics::par(mfrow = c(2, 1))
-  }
 
   n <- length(y)
   D <- diff(diag(n), differences = 2)
@@ -160,7 +160,7 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
     else{
       if(algo=="cpp"){
         if(verbose){print("using rcpparma_armaInv")}
-        z <- rcpparma_armaInv(W + H) %*% (W %*% y)
+        z <-.Call(`_baselineARPLss_rcpparma_armaInv`, W + H)%*% (W %*% y)
       }
       else {
         if(verbose){print("using solve.banded")}
@@ -201,11 +201,12 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
 #' @title Raw Raman spectrum for Abelsonite
 #' @description A data frame containing 3315 rows and 2 variables (wavenumber and measurement)
 #' @author Bob Downs \email{rdowns@u.arizona.edu}
-#' @examples{data("Abelsonite")}
+#' @examples data("Abelsonite")
 #' @references
 #' Lafuente B, Downs R T, Yang H, Stone N (2015) The power of databases: the RRUFF project.
 #' In: Highlights in Mineralogical Crystallography,
 #' T Armbruster and R M Danisi, eds. Berlin, Germany, W. De Gruyter, pp 1-30
 #' @source \url{https://rruff.info/repository/sample_child_record_raman_full/by_minerals/Abelsonite__R070007__Broad_Scan__532__0__unoriented__Raman_Data_RAW__13756.txt}
+#' @export Abelsonite
 "Abelsonite"
 

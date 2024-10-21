@@ -16,6 +16,9 @@ Abelsonite
 \description{
 A data frame containing 3315 rows and 2 variables (wavenumber and measurement)
 }
+\examples{
+data("Abelsonite")
+}
 \references{
 Lafuente B, Downs R T, Yang H, Stone N (2015) The power of databases: the RRUFF project.
 In: Highlights in Mineralogical Crystallography,

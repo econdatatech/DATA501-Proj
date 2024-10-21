@@ -11,38 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// rcpparma_hello_world
-arma::mat rcpparma_hello_world();
-RcppExport SEXP _baselineARPLss_rcpparma_hello_world() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpparma_hello_world());
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpparma_outerproduct
-arma::mat rcpparma_outerproduct(const arma::colvec& x);
-RcppExport SEXP _baselineARPLss_rcpparma_outerproduct(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpparma_outerproduct(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpparma_innerproduct
-double rcpparma_innerproduct(const arma::colvec& x);
-RcppExport SEXP _baselineARPLss_rcpparma_innerproduct(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpparma_innerproduct(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpparma_armaInv
 arma::mat rcpparma_armaInv(const arma::mat& x);
 RcppExport SEXP _baselineARPLss_rcpparma_armaInv(SEXP xSEXP) {
@@ -56,9 +24,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_baselineARPLss_rcpparma_hello_world", (DL_FUNC) &_baselineARPLss_rcpparma_hello_world, 0},
-    {"_baselineARPLss_rcpparma_outerproduct", (DL_FUNC) &_baselineARPLss_rcpparma_outerproduct, 1},
-    {"_baselineARPLss_rcpparma_innerproduct", (DL_FUNC) &_baselineARPLss_rcpparma_innerproduct, 1},
     {"_baselineARPLss_rcpparma_armaInv", (DL_FUNC) &_baselineARPLss_rcpparma_armaInv, 1},
     {NULL, NULL, 0}
 };
