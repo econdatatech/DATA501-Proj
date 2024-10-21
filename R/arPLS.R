@@ -71,8 +71,7 @@ summary.arPLSresult<- function(object, ...){
 #' @title asymmetrically reweighted penalized least squares
 #'
 #' @author Corvin Idler
-#' @description
-#' Baseline estimation using asymmetrically reweighted penalized least squares smoothing (Baek et al. 2015).
+#' @description Baseline estimation using asymmetrically reweighted penalized least squares smoothing (Baek et al. 2015).
 #'
 #' @details
 #' The algorithm iteratively estimates a spectral baseline curve by updating a
@@ -102,11 +101,11 @@ summary.arPLSresult<- function(object, ...){
 #'   \item \code{last_ratio}: The last value of the ratio stopping criterium before stopping.
 #' }
 #'
-#' @examples{
+#' @examples {
 #' data("Abelsonite")
 #' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
 #' }
-#' @export baseline_estimation
+#' @export
 baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,algo="banded") {
 # default values from page 253 of original publication
 

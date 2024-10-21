@@ -43,7 +43,7 @@ Execute the following test (with the expected result of FALSE)
 ```{r}
 #Generate testdata
 wavenumbers <- seq(0, 1000, length.out = 1000)
-raman_spectra <- 100*exp(-((wavenumbers-300)/15)^2) + 200*exp(-((wavenumbers-750)/30)^2) #+ 100*exp(-((wavenumbers-800)/15)^2)
+raman_spectra <- 100*exp(-((wavenumbers-300)/15)^2) + 200*exp(-((wavenumbers-750)/30)^2) 
 
 sum(baseline_estimation(wavenumbers+raman_spectra,verbose=FALSE)$baseline-wavenumbers)>=0.001
 ```

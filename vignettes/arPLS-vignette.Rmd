@@ -92,6 +92,8 @@ The problem of the true signal being estimated to high due to the negative noise
 ![Results of airPLS.airPLS function on noisy signal ](myresult.crop.png)
 the asymmetrically reweighted penalized least squares smoothing method as proposed by @Baek2015 and implemented by the package described by this vignette avoids this problem and doesn't have the baseline estimate pushed down due to negative values in additive noise. That means the actual baseline corrected signal won't be falsely "pushed up" (as would be the case with the previously discussed methods). 
 
+
+
 # Bibliography
 
 
