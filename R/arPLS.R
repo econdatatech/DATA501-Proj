@@ -165,7 +165,11 @@ baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,ver
 
     W <- diag(as.numeric(w))
 
-    if(algo=="native"){
+    #issue a warning if matrix close to singular (though that is unlikely)
+    if(abs(det(W + H)) < 1e-10){
+      warning("The Matrix W+H seems to be close to singular. The program might not converge or lead to wrong or unexpected results. We try to continue the execution.")
+    }
+        if(algo=="native"){
         if(verbose){print("using native solve")}
         z <- solve(W + H) %*% (W %*% y)
     }
