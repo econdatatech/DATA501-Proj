@@ -81,6 +81,17 @@ The custom summary function will print the control parameter with which the algo
 summary(result)
 ```
 
+# Technical details
+According @Baek2015 the existing methods of @Eilers2005,@Zhang2010 suffer from the problem that additive signal noise is considered (in practical terms of these algorithms) to sit above the baseline (in red) as can be seen in the two pictures below.
+![Results of baseline.als function on noisy signal ](baseline.alsresult.crop.png)
+![Results of airPLS.airPLS function on noisy signal ](airPLSresults.png)
+For the purpose of these pictures I generated test data by using a sin curve and adding strong Gaussian noise. 
+The first picture is the result of using the baseline.als() function of the baseline package^[https://rdrr.io/cran/baseline/man/baseline.als.html] with default parameters. This package implements the Asymmetric Least Squares Smoothing as proposed in @Eilers2005.
+The second picture shows the result of the adaptive iteratively reweighted penalized least squares method as proposed in @Zhang2010. I used the airPLS() function of the airPLS package^[https://github.com/zmzhang/airPLS] with default parameters.
+The problem of the true signal being estimated to high due to the negative noise values of the additive noise forcing the estimated baseline (red) down is well illustrated. As can be seen in the picture below
+![Results of airPLS.airPLS function on noisy signal ](myresult.crop.png)
+the asymmetrically reweighted penalized least squares smoothing method as proposed by @Baek2015 and implemented by the package described by this vignette avoids this problem and doesn't have the baseline estimate pushed down due to negative values in additive noise. That means the actual baseline corrected signal won't be falsely "pushed up" (as would be the case with the previously discussed methods). 
+
 # Bibliography
 
 
