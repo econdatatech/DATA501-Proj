@@ -103,7 +103,7 @@ summary.arPLSresult<- function(object, ...){
 #'
 #' @examples {
 #' data("Abelsonite")
-#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=TRUE)
 #' }
 #' @export
 baseline_estimation <- function(y, lambda = 1e6, ratio = 1e-6, max_iter = 50,verbose=FALSE,algo="banded") {
