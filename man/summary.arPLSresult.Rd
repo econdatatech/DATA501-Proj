@@ -15,3 +15,10 @@
 This is an S3 generic.
 To summarize (print) some facts about the arPLS baseline estimation that led to it.
 }
+\examples{
+{
+data("Abelsonite")
+baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+summary(baseline)
+}
+}

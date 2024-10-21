@@ -14,3 +14,10 @@
 \description{
 This is an S3 generic. To plot an input spectrum and an estimated baseline spectrum.
 }
+\examples{
+{
+data("Abelsonite")
+baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+plot(baseline)
+}
+}

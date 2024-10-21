@@ -26,6 +26,12 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
 #'
 #' @param x A result object of class arPLSresult (mainly a list).
 #' @param ... placeholder for arbitrary additional parameters (to stay in line with other generic plot functions)
+#'
+#' @examples{
+#' data("Abelsonite")
+#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+#' plot(baseline)
+#' }
   plot.arPLSresult<- function(x,...){
   plot(x$rawinput,main="arPLS baseline estimation",ylab="Measurements")
   graphics::lines(x$baseline,col='red')
@@ -40,6 +46,12 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
 #'
 #' @param object A result object of class arPLSresult (mainly a list).
 #' @param ... placeholder for arbitrary additional parameters (to stay in line with other generic summary functions)
+#'
+#' @examples{
+#' data("Abelsonite")
+#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+#' summary(baseline)
+#' }
 #' @export
 summary.arPLSresult<- function(object, ...){
   print(paste("The lambda parmeter value used was: ",object$lambda))
