@@ -24,9 +24,8 @@ This algorithm estimates a baseline by trying to solve a multi criteria optimisa
 
 * closely follow the original measurements 
 * don't have much curvature ("wigglyness")
-* be located below the original measurements
 
-To balance 1. and 2. a user provided smoothness parameter $\lambda$ is taken into account. To satisfy 3., the algorithms uses a list of weights that put the estimation emphasis (error minimisation) of any given iteration on areas where the baseline is over or close to the original signal. While areas with a large difference between baseline and original measurement are assumed to be due to a valid signal peak in that area. The algorithm will assign low weights for the optimisation efforts to those areas as it would be counter productive to try and force the baseline to mirror any actual signal peak, given that the whole point of a baseline estimation is to tell the background noise apart from the valid signal. 
+To balance 1. and 2. a user provided smoothness parameter $\lambda$ is taken into account. The algorithms uses a list of weights that put the estimation emphasis (error minimisation) of any given iteration on areas where the baseline is close to the original signal. While areas with a large difference between baseline and original measurement are assumed to be due to a valid signal peak in that area. The algorithm will assign low weights for the optimisation efforts to those areas as it would be counter productive to try and force the baseline to mirror any actual signal peak, given that the whole point of a baseline estimation is to tell the background noise apart from the valid signal. 
 
 # Usage
 In terms of usage of the package, the end user will need to provide an input vector of a measured spectrum, a smoothness parameter $\lambda$ to control the allowed curvieness of the baseline estimate and a stopping criterion in terms of maximum number of iterations and/or percentage changes of the internal weight parameters from one iteration to the next. 
@@ -57,11 +56,11 @@ With such input data at hand one of the most basic calls of the baseline_estimat
 result<-baseline_estimation(Abelsonite$measurement,max_iter=20)
 #due to default values that is the equivalent for the following function call
 #result <- -baseline_estimation(Abelsonite$measurement, lambda = 1e6, 
-#ratio = 1e-6, max_iter = 50,verbose=FALSE, algo="banded")
+#ratio = 1e-6, max_iter = 20,verbose=FALSE, algo="banded")
 ```
 
 The package will use an S3 object of the class arPLSresult to store the results of the baseline estimation. The data structure behind this object is a named list with input data, result and parameter values.  
-The rational is that similarly to the result object of a lm-regression is would be important or at least useful to have contextual information beside the end result. This additional information includes the parameter values with which the algorithm was run:
+The rational is that similarly to the result object of a lm-regression it would be important or at least useful to have contextual information beside the end result. This additional information includes the parameter values with which the algorithm was run:
 \begin{itemize}
     \item raw spectrum that was used as input data
     \item smoothness parameter lambda that the user provided
@@ -84,7 +83,7 @@ summary(result)
 # Technical details
 ## Draw backs of existing methods
 
-According @Baek2015 the existing methods of @Eilers2005,@Zhang2010 suffer from the problem that additive signal noise is considered (in practical terms of these algorithms) to sit above the baseline (in red) as can be seen in the two pictures below.
+According @Baek2015 the existing methods of @Eilers2005 as well as @Zhang2010 suffer from the problem that additive signal noise is considered (in practical terms of these algorithms) to sit above the baseline (in red) as can be seen in the two pictures below.
 ![Results of baseline.als function on noisy signal ](baseline.alsresult.crop.png)
 ![Results of airPLS.airPLS function on noisy signal ](airPLSresults.png)
 For the purpose of these pictures I generated test data by using a sin curve and adding strong Gaussian noise. 
@@ -118,13 +117,13 @@ H = D^{T}D \begin{bmatrix}
 \end{bmatrix}
 $$
 
-Using matrix algebra one can try to find the minimum as follows
+Using matrix algebra one can try to find the minimum of the above equation as follows
 $$\frac{\partial S(\mathbf{z})}{\partial \mathbf{z}^{T}} =  2\mathbf{W}(\mathbf{y}-\mathbf{z})+2\lambda\mathbf{D}^{T}\mathbf{D}\mathbf{z} = 0
 $$
 the above equation has the following solution
 $$\mathbf{z} = \underbrace{(\mathbf{W}+\lambda\mathbf{D}^{T}\mathbf{D})^{-1}}_{\text{Matrix inversion}} \mathbf{W}\mathbf{y}
 $$
-The main differences between the 3 above mentioned methods are how the weight vector W is set.
+The main differences between the 3 previously mentioned methods are how the weight vector W is set.
 $$
 \text{AsLS: }w_{i}=
 \begin{cases} 
@@ -155,12 +154,22 @@ $$
 with $\text{logistic}(d_{i},m,\sigma)=(1+\exp(2(d_{i}-(-m+2\sigma))/\sigma))^{-1}$ and  $d^{-}$ the vector of points where y-z is negative and  $m_{d^{-}}$ and   $\sigma_{d^{-}}$ the mean and standard deviation of that vector. 
 
 The generalized logistic function is shown below and we can see that weights are close to zero where there is a large distance between between the signal and the noise but close to one where this distance is small.
+The core idea is that this function gives nearly the same weight to the signal below or above a baseline when the difference between the signal and the baseline is smaller than the estimated noise mean. It gradually reduces the weight as the level of the signal increases. If a signal is in the $3\sigma$ from the estimated noise mean, small weight is still given. As from around $4\sigma$ the weights are close to zero @Baek2015.
 ![Generalized logistic function ](genlog.png)
-The pseudo code for the arPLS algorithm is as follows. Two execution criteria are taken into acccount, namely the maximum number of iterations (default: 50) and a conversion criteria "ratio" (default: 1e-6) that checks if the percentage difference of the length of the weight vector falls below a certain threshold. A smoothness parameter lambda (default: 1e6) steers the tradeoff of how closely the baseline mirrors the raw signal vs. how smooth (not "wiggly") it is.
-One can see that repeatedly an inverse matrix has to be calculated, which is the main performance bottleneck of the algorithm.
-The package offers 3 different solvers for the matrix inversion, namely the native R solve() function, the Inv() function from the Armadillo C++ package and the Solve.banded() function from the limSolve package which relies on the LINPACK fortran library. In tests it has been shown that the Inv() function is more than twice as fast as the solve() function but the Solve.banded() function wich is optimized for banded matrices (as the case with W+H) improves performance by a factor 35 compared with the solve() function and a factor of 14 compared to the Inv() function.
+## Pseudo code for arPLS algorithm
+
+The pseudo code for the arPLS algorithm is as follows. 
 ![Generalized logistic function ](pseudo.png)
 
+Two stopping criteria are taken into acccount, namely the maximum number of iterations (default: 50) and a conversion criteria called "ratio" (default: 1e-6) that checks if the percentage difference of the length of the weight vector falls below a certain threshold. A smoothness parameter lambda (default: 1e6) steers the tradeoff of how closely the baseline mirrors the raw signal vs. how smooth (not "wiggly") it is.
+If a too small lambda is chosen the baseline mirrors the raw spectrum too closely as shown below.
+![Too small lambda](Rplot1e4.png)
+If lambda is chosen too big, the baseline becomes increasingly "detached" from the measurement and approaches a straight line (as shown below)
+![Too small lambda](Rplot1e10.png)
+
+## Performance considerations
+With reference to the above pseudo code, one can see that repeatedly an inverse matrix has to be calculated, which is the main performance bottleneck of the algorithm.
+The package offers 3 different solvers for the matrix inversion, namely the native R solve() function (paramter algo="native"), the Inv() (paramter algo="cpp") function from the Armadillo C++ package and the Solve.banded() function (paramter algo="banded") from the limSolve package which relies on the LINPACK fortran library. In tests it has been shown that the Inv() function is more than twice as fast as the solve() function but the Solve.banded() function wich is optimized for banded matrices (as the case with W+H) improves performance by a factor 35 compared with the solve() function and a factor of 14 compared to the Inv() function.
 
 # Bibliography
 
