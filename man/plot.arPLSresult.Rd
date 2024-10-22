@@ -17,7 +17,7 @@ This is an S3 generic. To plot an input spectrum and an estimated baseline spect
 \examples{
 {
 data("Abelsonite")
-baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=TRUE)
 plot(baseline)
 }
 }

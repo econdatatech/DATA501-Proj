@@ -29,7 +29,7 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
 #'
 #' @examples{
 #' data("Abelsonite")
-#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=TRUE)
 #' plot(baseline)
 #' }
   plot.arPLSresult<- function(x,...){
@@ -49,7 +49,7 @@ new_arPLSresult <- function(rawinput = numeric(), lambda = 1e6, ratio=1e-6, max_
 #'
 #' @examples{
 #' data("Abelsonite")
-#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+#' baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=TRUE)
 #' summary(baseline)
 #' }
 #' @export

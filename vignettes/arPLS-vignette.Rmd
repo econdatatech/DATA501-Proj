@@ -82,6 +82,8 @@ summary(result)
 ```
 
 # Technical details
+## Draw backs of existing methods
+
 According @Baek2015 the existing methods of @Eilers2005,@Zhang2010 suffer from the problem that additive signal noise is considered (in practical terms of these algorithms) to sit above the baseline (in red) as can be seen in the two pictures below.
 ![Results of baseline.als function on noisy signal ](baseline.alsresult.crop.png)
 ![Results of airPLS.airPLS function on noisy signal ](airPLSresults.png)
@@ -92,6 +94,72 @@ The problem of the true signal being estimated to high due to the negative noise
 ![Results of airPLS.airPLS function on noisy signal ](myresult.crop.png)
 the asymmetrically reweighted penalized least squares smoothing method as proposed by @Baek2015 and implemented by the package described by this vignette avoids this problem and doesn't have the baseline estimate pushed down due to negative values in additive noise. That means the actual baseline corrected signal won't be falsely "pushed up" (as would be the case with the previously discussed methods). 
 
+## Inner workings of arPLS
+At the core of all of the 3 above mentioned methods is the following equation
+$$
+    \underbrace{S(\mathbf{z})}_{\text{Smoothed signal=baseline}} = \underbrace{(\mathbf{y}-\mathbf{z})^{T}\mathbf{W}(\mathbf{y}-\mathbf{z})}_{\text{weighted squared difference between baseline and signal}}+\underbrace{\lambda\mathbf{z}^{T}\mathbf{D}^{T}\mathbf{D}\mathbf{z}}_{\text{smoothness penalty for baseline}} 
+$$
+One tries to minimize the difference between the estimated baseline and the raw signal all while also minimizing a penalty term on the estimated baseline that tries to enforce smoothness of the baseline. The smoothness penalty is achieved via a second order difference matrix as shown in the example below
+
+$$
+D = \begin{bmatrix}
+1 & -2 & 1 & 0 & 0 \\
+0 & 1 & -2 & 1 & 0 \\
+0 & 0 & 1 & -2 & 1
+\end{bmatrix}
+$$
+$$
+H = D^{T}D \begin{bmatrix}
+1 & -2 & 1 & 0 & 0 \\
+-2 & 5 & -4 & 1 & 0 \\
+1 & -4 & 6 & -4 & 1 \\
+0 & 1 & -4 & 5 & -2 \\
+0 & 0 & 1 & -2 & 1
+\end{bmatrix}
+$$
+
+Using matrix algebra one can try to find the minimum as follows
+$$\frac{\partial S(\mathbf{z})}{\partial \mathbf{z}^{T}} =  2\mathbf{W}(\mathbf{y}-\mathbf{z})+2\lambda\mathbf{D}^{T}\mathbf{D}\mathbf{z} = 0
+$$
+the above equation has the following solution
+$$\mathbf{z} = \underbrace{(\mathbf{W}+\lambda\mathbf{D}^{T}\mathbf{D})^{-1}}_{\text{Matrix inversion}} \mathbf{W}\mathbf{y}
+$$
+The main differences between the 3 above mentioned methods are how the weight vector W is set.
+$$
+\text{AsLS: }w_{i}=
+\begin{cases} 
+p & \text{if } y_{i} > z_{i} \\
+1-p & \text{if } y_{i} \leq z_{i}
+\end{cases}
+\text{ with p e.g. 0.01}
+$$
+
+$$
+\text{airPLS: }w_{i}=
+\begin{cases} 
+0 & \text{if } y_{i} \geq z_{i} \\
+\exp^{t(y_{i}-z{i})/|d|} & \text{if } y_{i} \leq z_{i}
+\end{cases}
+$$
+with d = vector where $y_{i}-z_{i}$ is negative and t is the number of iteration
+
+The method in this package (arPLS) has a slightly more complicated mechanism for setting the weights:
+$$
+\text{ArPLS: }w_{i}=
+\begin{cases} 
+\text{logistic}(y_{i}-z{i},m_{d^{-}},\sigma_{d^{-}}) & \text{if } y_{i} \geq z_{i} \\
+1 & \text{if } y_{i} < z_{i}
+\end{cases}
+$$
+
+with $\text{logistic}(d_{i},m,\sigma)=(1+\exp(2(d_{i}-(-m+2\sigma))/\sigma))^{-1}$ and  $d^{-}$ the vector of points where y-z is negative and  $m_{d^{-}}$ and   $\sigma_{d^{-}}$ the mean and standard deviation of that vector. 
+
+The generalized logistic function is shown below and we can see that weights are close to zero where there is a large distance between between the signal and the noise but close to one where this distance is small.
+![Generalized logistic function ](genlog.png)
+The pseudo code for the arPLS algorithm is as follows. Two execution criteria are taken into acccount, namely the maximum number of iterations (default: 50) and a conversion criteria "ratio" (default: 1e-6) that checks if the percentage difference of the length of the weight vector falls below a certain threshold. A smoothness parameter lambda (default: 1e6) steers the tradeoff of how closely the baseline mirrors the raw signal vs. how smooth (not "wiggly") it is.
+One can see that repeatedly an inverse matrix has to be calculated, which is the main performance bottleneck of the algorithm.
+The package offers 3 different solvers for the matrix inversion, namely the native R solve() function, the Inv() function from the Armadillo C++ package and the Solve.banded() function from the limSolve package which relies on the LINPACK fortran library. In tests it has been shown that the Inv() function is more than twice as fast as the solve() function but the Solve.banded() function wich is optimized for banded matrices (as the case with W+H) improves performance by a factor 35 compared with the solve() function and a factor of 14 compared to the Inv() function.
+![Generalized logistic function ](pseudo.png)
 
 
 # Bibliography

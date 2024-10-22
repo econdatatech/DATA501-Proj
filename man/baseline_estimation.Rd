@@ -50,7 +50,7 @@ each other
 \examples{
 {
 data("Abelsonite")
-baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=TRUE)
 }
 }
 \references{

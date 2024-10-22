@@ -18,7 +18,7 @@ To summarize (print) some facts about the arPLS baseline estimation that led to 
 \examples{
 {
 data("Abelsonite")
-baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=T)
+baseline <- baseline_estimation(Abelsonite$measurement, max_iter=10, verbose=TRUE)
 summary(baseline)
 }
 }
