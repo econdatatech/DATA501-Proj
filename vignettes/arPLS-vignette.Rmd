@@ -117,7 +117,7 @@ H = D^{T}D \begin{bmatrix}
 \end{bmatrix}
 $$
 
-Using matrix algebra one can try to find the minimum of the above equation as follows
+One can try to find the minimum of the above equation as follows
 $$\frac{\partial S(\mathbf{z})}{\partial \mathbf{z}^{T}} =  2\mathbf{W}(\mathbf{y}-\mathbf{z})+2\lambda\mathbf{D}^{T}\mathbf{D}\mathbf{z} = 0
 $$
 the above equation has the following solution
@@ -156,17 +156,18 @@ with $\text{logistic}(d_{i},m,\sigma)=(1+\exp(2(d_{i}-(-m+2\sigma))/\sigma))^{-1
 The generalized logistic function is shown below and we can see that weights are close to zero where there is a large distance between between the signal and the noise but close to one where this distance is small.
 The core idea is that this function gives nearly the same weight to the signal below or above a baseline when the difference between the signal and the baseline is smaller than the estimated noise mean. It gradually reduces the weight as the level of the signal increases. If a signal is in the $3\sigma$ from the estimated noise mean, small weight is still given. As from around $4\sigma$ the weights are close to zero @Baek2015.
 ![Generalized logistic function ](genlog.png)
+\pagebreak
 
 ## Pseudo code for arPLS algorithm
 
 The pseudo code for the arPLS algorithm is as follows. 
 
-![Generalized logistic function ](pseudo.png)
+![Pseudo code ](pseudo.png)
 
-Two stopping criteria are taken into acccount, namely the maximum number of iterations (default: 50) and a conversion criteria called "ratio" (default: 1e-6) that checks if the percentage difference of the length of the weight vector falls below a certain threshold. A smoothness parameter lambda (default: 1e6) steers the tradeoff of how closely the baseline mirrors the raw signal vs. how smooth (not "wiggly") it is.
-If a too small lambda is chosen the baseline mirrors the raw spectrum too closely as shown below.
+Two stopping criteria are taken into account, namely the maximum number of iterations (default: 50) and a conversion criteria called "ratio" (default: 1e-6) that checks if the percentage difference of the length of the weight vector falls below a certain threshold. A smoothness parameter lambda (default: 1e6) steers the tradeoff of how closely the baseline mirrors the raw signal vs. how smooth (not "wiggly") it is.
+If a too small lambda is chosen (e.g. 1e4) the baseline mirrors the raw spectrum too closely as shown below.
 ![Too small lambda](Rplot1e4.png)
-If lambda is chosen too big, the baseline becomes increasingly "detached" from the measurement and approaches a straight line (as shown below)
+If lambda is chosen too big (e.g. 1e10), the baseline becomes increasingly "detached" from the measurement and approaches a straight line (as shown below)
 
 ![Too small lambda](Rplot1e10.png)
 
