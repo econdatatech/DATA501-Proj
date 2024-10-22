@@ -1,5 +1,5 @@
 ---
-title: "arPLS-vignette"
+title: "baselineARPLss-vignette"
 output: rmarkdown::pdf_document
 bibliography: bibliography.bib
 vignette: >
@@ -159,12 +159,14 @@ The core idea is that this function gives nearly the same weight to the signal b
 ## Pseudo code for arPLS algorithm
 
 The pseudo code for the arPLS algorithm is as follows. 
+
 ![Generalized logistic function ](pseudo.png)
 
 Two stopping criteria are taken into acccount, namely the maximum number of iterations (default: 50) and a conversion criteria called "ratio" (default: 1e-6) that checks if the percentage difference of the length of the weight vector falls below a certain threshold. A smoothness parameter lambda (default: 1e6) steers the tradeoff of how closely the baseline mirrors the raw signal vs. how smooth (not "wiggly") it is.
 If a too small lambda is chosen the baseline mirrors the raw spectrum too closely as shown below.
 ![Too small lambda](Rplot1e4.png)
 If lambda is chosen too big, the baseline becomes increasingly "detached" from the measurement and approaches a straight line (as shown below)
+
 ![Too small lambda](Rplot1e10.png)
 
 ## Performance considerations
